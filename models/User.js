@@ -14,8 +14,8 @@ const UserSchema = new Schema(
             require: true,
             trim: true,
             validate: input => {
-                const regex = new RegExp('^\w+@\w+.\w+$');
-                
+                const regex = new RegExp('^\\w+@\\w+.\\w+$');
+
                 return regex.test(input);
             }
         }

@@ -12,7 +12,7 @@ const userController = {
 
     getUserById({params}, res) {
         User.findOne({
-            _id: params.id
+            _id: params.userId
         })
         .then(data => {
             if (!data) {
@@ -34,8 +34,8 @@ const userController = {
     },
 
     updateUser({params, body}, res) {
-        User.findOneOrUpdate(
-            {_id: params.id},
+        User.findOneAndUpdate(
+            {_id: params.userId},
             body,
             {new: true, runValidators: true}
         )
@@ -53,7 +53,7 @@ const userController = {
     },
 
     deleteUser({params}, res) {
-        User.findOneAndDelete({_id: params.id})
+        User.findOneAndDelete({_id: params.userId})
         .then(data => {
             if (!data) {
                 res.status(404).json({message: 'No user with that ID.'});
