@@ -18,7 +18,11 @@ const UserSchema = new Schema(
 
                 return regex.test(input);
             }
-        }
+        },
+        thoughts: [{
+            type: Schema.Types.ObjectId,
+            ref: 'Thought'
+        }]
     }
 );
 
