@@ -11,4 +11,4 @@ app.use(require('./routes'));
 
 mongoose.connect('mongodb://127.0.0.1:27017/deep-thoughts');
 
-app.listen(PORT, () => console.log('http://lcoalhost:' + PORT));
+app.listen(PORT, () => console.log('http://localhost:' + PORT));

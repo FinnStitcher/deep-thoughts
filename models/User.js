@@ -11,7 +11,7 @@ const UserSchema = new Schema(
         email: {
             type: String,
             unique: true,
-            require: true,
+            required: true,
             trim: true,
             validate: input => {
                 const regex = new RegExp('^\\w+@\\w+.\\w+$');

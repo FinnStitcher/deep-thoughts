@@ -1,47 +1,49 @@
-const {User} = require('../models');
+const {Thought} = require('../models');
 
-const userController = {
-    getAllUsers(req, res) {
-        User.find({})
+const thoughtController = {
+    getAllThoughts(req, res) {
+        Thought.find({})
         .then(data => res.json(data))
-        .catch(err => {
-            console.log(err);
-            res.status(500).json(err);
-        })
-    },
-
-    getUserById({params}, res) {
-        User.findOne({
-            _id: params.userId
-        })
-        .then(data => {
-            if (!data) {
-                res.status(404).json({message: 'No user with that ID.'});
-            } else {
-                res.json(data);
-            }
-        })
         .catch(err => {
             console.log(err);
             res.status(500).json(err);
         });
     },
 
-    createUser({body}, res) {
-        User.create(body)
-        .then(data => res.json(data))
-        .catch(err => res.status(500).json(err));
+    getThoughtById({params}, res) {
+        Thought.findOne({
+            _id: params.thoughtId
+        })
+        .then(data => {
+            if (!data) {
+                res.status(404).json({message: 'No thought with that ID.'});
+            } else {
+                res.json(data);
+            }
+        })
+        .catch(err => {
+            console.log(err);
+        });
     },
 
-    updateUser({params, body}, res) {
-        User.findOneAndUpdate(
-            {_id: params.userId},
+    createThought({body}, res) {
+        Thought.create(body)
+        .then(data => res.json(data))
+        .catch(err => {
+            console.log(err);
+            res.status(500).json(err);
+        })
+    },
+
+    updateThought({params, body}, res) {
+        Thought.findOneAndUpdate(
+            {_id: params.thoughtId},
             body,
-            {new: true, runValidators: true}
+            {new: true}
         )
         .then(data => {
             if (!data) {
-                res.status(404).json({message: 'No user with that ID.'});
+                res.status(404).json({message: 'No thought with that ID.'});
             } else {
                 res.json(data);
             }
@@ -52,13 +54,13 @@ const userController = {
         })
     },
 
-    deleteUser({params}, res) {
-        User.findOneAndDelete(
-            {_id: params.userId}
+    deleteThought({params}, res) {
+        Thought.findOneAndDelete(
+            {_id: params.thoughtId}
         )
         .then(data => {
             if (!data) {
-                res.status(404).json({message: 'No user with that ID.'});
+                res.status(404).json({message: 'No thought with that ID.'});
             } else {
                 res.json(data);
             }
@@ -70,4 +72,4 @@ const userController = {
     }
 };
 
-module.exports = userController;
+module.exports = thoughtController;
