@@ -5,7 +5,7 @@ const userController = {
         User.find({})
         .populate({
             path: 'thoughts',
-            select: 'thoughtText'
+            select: ['thoughtText', 'createdAt']
         })
         .then(data => res.json(data))
         .catch(err => {
@@ -20,7 +20,7 @@ const userController = {
         })
         .populate({
             path: 'thoughts',
-            select: 'thoughtText'
+            select: ['thoughtText', 'createdAt']
         })
         .then(data => {
             if (!data) {
