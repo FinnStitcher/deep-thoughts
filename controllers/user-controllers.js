@@ -4,7 +4,8 @@ const userController = {
     getAllUsers(req, res) {
         User.find({})
         .populate({
-            path: 'thoughts'
+            path: 'thoughts',
+            select: '_id thoughtText createdAt reactions'
         })
         .then(data => res.json(data))
         .catch(err => {
@@ -18,7 +19,8 @@ const userController = {
             _id: params.userId
         })
         .populate({
-            path: 'thoughts'
+            path: 'thoughts',
+            select: '_id thoughtText createdAt reactions'
         })
         .then(data => {
             if (!data) {

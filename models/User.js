@@ -28,12 +28,18 @@ const UserSchema = new Schema(
             ref: 'User'
             // preventing duplicates will happen in the controller thanks to $addToSet
         }]
+    },
+    {
+        toJSON: {
+            virtuals: true
+        },
+        id: false
     }
 );
 
-// UserSchema.virtual('friendCount').get(function() {
-//     return this.friends.length;
-// });
+UserSchema.virtual('friendCount').get(function() {
+    return this.friends.length;
+});
 
 const User = model('User', UserSchema);
 
