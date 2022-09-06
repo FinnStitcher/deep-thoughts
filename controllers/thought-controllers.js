@@ -49,25 +49,6 @@ const thoughtController = {
         })
     },
 
-    createReaction({params, body}, res) {
-        Thought.findOneAndUpdate(
-            { _id: params.thoughtId },
-            { $push: {reactions: body} },
-            { new: true, runValidators: true }
-        )
-        .then(data => {
-            if (!data) {
-                res.status(404).json({message: 'No thought with this ID.'});
-            } else {
-                res.json(data);
-            }
-        })
-        .catch(err => {
-            console.log(err);
-            res.status(500).json(err);
-        });
-    },
-
     updateThought({params, body}, res) {
         Thought.findOneAndUpdate(
             {_id: params.thoughtId},
@@ -95,13 +76,44 @@ const thoughtController = {
             if (!data) {
                 res.status(404).json({message: 'No thought with that ID.'});
             } else {
-                res.json(data);
+                // locate the user that made this thought and remove it from that document
+                return User.findOneAndUpdate(
+                    { username: data.username },
+                    { $pull: {thoughts: params.thoughtId} },
+                    { new: true }
+                );
+            }
+        })
+        .then(userData => {
+            if (!userData) {
+                res.status(400).json({message: 'Deleted thought could not be removed from the user\'s profile.'});
+            } else {
+                res.json(userData);
             }
         })
         .catch(err => {
             console.log(err);
             res.status(500).json(err);
         })
+    },
+
+    createReaction({params, body}, res) {
+        Thought.findOneAndUpdate(
+            { _id: params.thoughtId },
+            { $push: {reactions: body} },
+            { new: true, runValidators: true }
+        )
+        .then(data => {
+            if (!data) {
+                res.status(404).json({message: 'No thought with this ID.'});
+            } else {
+                res.json(data);
+            }
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json(err);
+        });
     },
 
     deleteReaction({params}, res) {
