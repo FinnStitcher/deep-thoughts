@@ -22,9 +22,18 @@ const UserSchema = new Schema(
         thoughts: [{
             type: Schema.Types.ObjectId,
             ref: 'Thought'
+        }],
+        friends: [{
+            type: Schema.Types.ObjectId,
+            ref: 'User'
+            // preventing duplicates will happen in the controller thanks to $addToSet
         }]
     }
 );
+
+UserSchema.virtual('friendCount').get(function() {
+    return this.friends.length;
+});
 
 const User = model('User', UserSchema);
 
