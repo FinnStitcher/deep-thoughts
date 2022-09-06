@@ -1,4 +1,4 @@
-const {User} = require('../models');
+const {User, Thought} = require('../models');
 
 const userController = {
     getAllUsers(req, res) {
@@ -66,8 +66,14 @@ const userController = {
             if (!data) {
                 res.status(404).json({message: 'No user with that ID.'});
             } else {
-                res.json(data);
+                // $in means "anything that's in this array"
+                return Thought.deleteMany(
+                    { _id: {$in: data.thoughts}}
+                );
             }
+        })
+        .then(deleted => {
+            res.json(deleted);
         })
         .catch(err => {
             console.log(err);
