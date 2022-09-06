@@ -49,6 +49,25 @@ const thoughtController = {
         })
     },
 
+    createReaction({params, body}, res) {
+        Thought.findOneAndUpdate(
+            { _id: params.thoughtId },
+            { $push: {reactions: body} },
+            { new: true, runValidators: true }
+        )
+        .then(data => {
+            if (!data) {
+                res.status(404).json({message: 'No thought with this ID.'});
+            } else {
+                res.json(data);
+            }
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json(err);
+        });
+    },
+
     updateThought({params, body}, res) {
         Thought.findOneAndUpdate(
             {_id: params.thoughtId},
@@ -71,6 +90,25 @@ const thoughtController = {
     deleteThought({params}, res) {
         Thought.findOneAndDelete(
             {_id: params.thoughtId}
+        )
+        .then(data => {
+            if (!data) {
+                res.status(404).json({message: 'No thought with that ID.'});
+            } else {
+                res.json(data);
+            }
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json(err);
+        })
+    },
+
+    deleteReaction({params}, res) {
+        Thought.findOneAndUpdate(
+            { _id: params.thoughtId },
+            { $pull: { reactions: {reactionId: params.reactionId} } },
+            { new: true }
         )
         .then(data => {
             if (!data) {
