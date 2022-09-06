@@ -73,6 +73,44 @@ const userController = {
             console.log(err);
             res.status(500).json(err);
         })
+    },
+
+    addFriend({params, body}, res) {
+        User.findOneAndUpdate(
+            { _id: params.userId },
+            { $addToSet: {friends: body.friendId} },
+            { new: true, runValidators: true }
+        )
+        .then(data => {
+            if (!data) {
+                res.status(404).json({message: 'No user with that ID.'});
+            } else {
+                res.json(data);
+            }
+        })
+        .catch(err => {
+            console.log(err);
+            res.json(err);
+        })
+    },
+
+    removeFriend({params}, res) {
+        User.findOneAndUpdate(
+            { _id: params.userId },
+            { $pull: {friends: params.friendId} },
+            { new: true }
+        )
+        .then(data => {
+            if (!data) {
+                res.status(404).json({message: 'No user with that ID.'});
+            } else {
+                res.json(data);
+            }
+        })
+        .catch(err => {
+            console.log(err);
+            res.json(err);
+        })
     }
 };
 
